@@ -12,10 +12,10 @@ from homework_7.tests.conftest import ZIP_PATH
 def test_read_csv_file_zip():
     with ZipFile(ZIP_PATH) as zip_file:
         csv_content = zip_file.read("file_example_XLS.csv").decode("utf-8-sig")
-        reader = csv.reader(csv_content.splitlines())
+        reader = csv.reader(csv_content.splitlines(), delimiter=";")
         data = list(reader)
-        assert "First Name" in data[0][0].split(";")[1]
-        assert "First Name" in data[0][0].split(";")[1]
+        assert "First Name" in data[0][1]
+        assert "Last Name" in data[0][2]
 
 def test_read_xls_file_zip():
     with ZipFile(ZIP_PATH) as zip_file:
