@@ -5,3 +5,6 @@ selenium
 openpyxl
 xlrd
 pypdf
+pytest-check
+httpx
+allure-pytest
