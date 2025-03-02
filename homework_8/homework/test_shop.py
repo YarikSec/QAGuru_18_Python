@@ -39,6 +39,7 @@ class TestProducts:
     def test_product_buy(self, product):
         # TODO напишите проверки на метод buy
         assert product.buy(1000)
+        assert product.buy(999)
         assert product.buy(0)
 
     def test_product_buy_more_than_available(self, product):
@@ -92,9 +93,19 @@ class TestCart:
 
         cart.add_product(product)
         cart.add_product(product_two, 2)
-        assert cart.buy()
+        assert cart.buy() is True
 
         # Проверил, что корзина пустая
         assert not cart.products
+    
+
+    def test_buy_insufficient_quantity(self, product, cart):
+        cart.add_product(product, product.quantity + 1)
+        with pytest.raises(ValueError) as ex_info:
+            assert cart.buy()
+
+        # Проверил сообщение об ошибке
+        assert str(ex_info.value) == "Недостаточно товаров на складе"
+
 
         

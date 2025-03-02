@@ -33,7 +33,12 @@ class Product:
         """
         if not self.check_quantity(quantity):
             raise ValueError(f"Недостаточно товара '{self.name}' на складе")
+        
         self.quantity -= quantity
+        return True
+        
+
+        
 
     def __hash__(self):
         return hash(self.name + self.description)
