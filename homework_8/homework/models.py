@@ -18,7 +18,6 @@ class Product:
         TODO Верните True если количество продукта больше или равно запрашиваемому
             и False в обратном случае
         """
-        # return self.quantity >= quantity
         if self.quantity >= quantity:
             return True
         else:
@@ -66,8 +65,10 @@ class Cart:
             raise ValueError("Количество товара не может быть отрицательным")
         if product in self.products:
             self.products[product] += buy_count
+            return True
         else:
             self.products[product] = buy_count
+            return True
 
     def remove_product(self, product: Product, remove_count=None):
         """
@@ -75,12 +76,17 @@ class Cart:
         Если remove_count не передан, то удаляется вся позиция
         Если remove_count больше, чем количество продуктов в позиции, то удаляется вся позиция
         """
-        if remove_count is None:
-            self.products.pop(product)
-        elif remove_count > self.products[product]:
-            self.products.pop(product)
-        else:
+        if product not in self.products:
+            raise ValueError("Товара нет в корзине")
+
+        if remove_count is None or remove_count >= self.products[product]:
+            del self.products[product]
+        elif 0 < remove_count < self.products[product]:
             self.products[product] -= remove_count
+            if self.products[product] == 0:
+                del self.products[product]
+        else:
+            raise ValueError("Количество товара не может быть отрицательным")
 
     def clear(self):
         return self.products.clear()
