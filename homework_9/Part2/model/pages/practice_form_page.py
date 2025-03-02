@@ -68,20 +68,12 @@ class PracticeFormPage:
             user.email,
             user.gender.value,
             user.phone,
-            f'{user.formatted_day()} {user.formatted_month()},{user.formatted_year()}'
+            f'{user.formatted_day()} {user.formatted_month()},{user.formatted_year()}',
+            user.subjects if user.subjects else '',
+            user.hobbies.value if user.hobbies else '',
+            user.avatar,
+            user.current_address,
+            user.state + ' ' + user.city
         ))
-
-        # Проверка необязательных полей
-        if user.subjects:
-            results.element_by(have.text(user.subjects))
-        
-        if user.hobbies:
-            results.element_by(have.text(user.hobbies.value))
-        
-        if user.current_address:
-            results.element_by(have.text(user.current_address))
-        
-        if user.state and user.city:
-            results.element_by(have.text(f'{user.state} {user.city}'))
 
         return self
