@@ -27,6 +27,8 @@ class TestProducts:
     def test_product_check_quantity(self, product_book):
         assert product_book.check_quantity(1000)
         assert product_book.check_quantity(999)
+
+    def test_product_check_quantity_more_than_available(self, product_book):
         assert not product_book.check_quantity(1001)
 
 
@@ -53,10 +55,11 @@ class TestCart:
         assert cart.add_product(product_book, 1)
         cart.clear()
 
+        assert cart.add_product(product_macbook, 1999)
+
+    def test_error_add_product_negative_quantity(self, product_book, cart):
         with pytest.raises(ValueError):
             assert cart.add_product(product_book, -1)
-
-        assert cart.add_product(product_macbook, 1999)
 
     """
     Тесты на удаления продуктов из корзины
@@ -116,15 +119,17 @@ class TestCart:
         assert cart.get_total_price() == 4100
 
     def test_buy(self, product_book, product_macbook, cart):
-        with pytest.raises(ValueError):
-            assert cart.buy()
-
         cart.add_product(product_book)
         cart.add_product(product_macbook, 2)
         assert cart.buy() is True
 
         # Проверил, что корзина пустая
         assert not cart.products
+
+    def test_buy_empty_cart(self, cart):
+        with pytest.raises(ValueError) as ex_info:
+            assert cart.buy()
+        assert "Корзина пустая" in str(ex_info.value)
     
 
     def test_buy_insufficient_quantity(self, product_book, product_macbook, cart):
