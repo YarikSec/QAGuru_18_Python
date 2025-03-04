@@ -1,9 +1,15 @@
+import os
+
 from selene import browser, have, be
-from pathlib import Path
+
+from selenium.webdriver.common.by import By
+
 
 class PracticeFormPage:
     def __init__(self):
-        self.base_path = Path(__file__).parent.parent / 'resources'
+        self.base_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..', 'tests', 'resources')
+        )
 
     def open(self):
         browser.open('https://demoqa.com/automation-practice-form')
@@ -29,16 +35,24 @@ class PracticeFormPage:
         return self
 
     def fill_subjects(self, *values):
-        browser.element('#subjectsInput').type(*values).press_enter()
+        for subject in values:
+            browser.element('#subjectsInput').type(subject).press_enter()
+
         return self
 
     def set_hobbies(self, *values):
+        # for value in values:
+        #     browser.element(f'[for^="hobbies-checkbox"][label="{value}"]').click()
         for value in values:
-            browser.element(f'[for="hobbies-checkbox-{value}"]').set_true()
+            browser.element(
+                (By.XPATH, f'//label[starts-with(@for, "hobbies-checkbox") and contains(text(), "{value}")]')).click()
+
         return self
 
     def upload_picture(self, picture):
-        browser.element('#uploadPicture').send_keys(self.base_path / picture)
+        file_path = os.path.join(self.base_path, picture)
+        browser.element('#uploadPicture').send_keys(file_path)
+
         return self
 
     def set_current_address(self, value):
@@ -47,14 +61,14 @@ class PracticeFormPage:
 
     def select_state(self, value):
         browser.element('#state').click()
-        browser.element('[id^=react-select][id*=option]').element_by(
+        browser.all('[id^=react-select][id*=option]').element_by(
             have.exact_text(value)
         ).click()
         return self
 
     def select_city(self, value):
         browser.element('#city').click()
-        browser.element('[id^=react-select][id*=option]').element_by(
+        browser.all('[id^=react-select][id*=option]').element_by(
             have.exact_text(value)
         ).click()
         return self
@@ -63,9 +77,9 @@ class PracticeFormPage:
         browser.element('#submit').press_enter()
         return self
     
-    def should_have_registered(self, full_name, email, gender, phone, date_of_birth, subject, hobbies, current_address, city):
+    def should_have_registered(self, full_name, email, gender, phone, date_of_birth, subject, hobbies, avatar, current_address, city):
         browser.element('.modal-content').should(be.visible)
-        browser.element('#example-modal-title').should(have.exact_text('Thanks for submitting the form'))
+        browser.element('.modal-title').should(have.exact_text('Thanks for submitting the form'))
         browser.element('.table').all('td').even.should(
             have.exact_texts(
                 full_name, 
@@ -75,6 +89,7 @@ class PracticeFormPage:
                 date_of_birth, 
                 subject,
                 hobbies,
+                avatar,
                 current_address,
                 city
             )
