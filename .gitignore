@@ -8,6 +8,14 @@
 /homework_6/
 /homework_7/
 /homework_8/
+homework_9/Part1/tests/test_demoqa_form_withoutPOM.py
+homework_10/info.md
+homework_10/tests/test_attachments.py
+
+
+# Allure
+homework_10/tests/allure-results
+/allure-results
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
