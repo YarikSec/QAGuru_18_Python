@@ -11,7 +11,11 @@
 homework_9/Part1/tests/test_demoqa_form_withoutPOM.py
 homework_10/info.md
 homework_10/tests/test_attachments.py
-homework_11_Jen
+homework_11
+homework_12(update_jenkins)
+homework_13(tg_bot)
+homework_14(demo)
+homework_15
 
 
 # Allure
@@ -118,14 +122,14 @@ ipython_config.py
 #   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
-#uv.lock
+uv.lock
 
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
+poetry.lock
 
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
