@@ -24,4 +24,3 @@ def browser_conf():
 
     print("Браузер закрывается, отойдите от компьютера!)")
     browser.quit()
-
