@@ -1,5 +1,6 @@
 import requests
 import json
+import pytest
 
 from jsonschema import validate
 
@@ -13,14 +14,34 @@ def test_get_user():
 
 def test_create_user():
     response = requests.post(url=f"{BASE_URL}/users", data={'name': 'morpheus', 'job': 'leader'})
+    data = response.json()
+
     assert response.status_code == 201
 
-def test_update_user():
-    response = requests.put(url=f'{BASE_URL}/users/2', data={'name': 'morpheus', 'job': 'zion resident'})
-    assert response.status_code == 200
+    assert data['name'] == 'morpheus'
+    assert data['job'] == 'leader'
 
-def test_delete_user():
-    response = requests.delete(url=f'{BASE_URL}/users/2')
+    with open('post_users.json') as file:
+        schema = json.load(file)
+        validate(instance=data, schema=schema)
+
+
+@pytest.fixture(scope="module")
+def user():
+    response = requests.post(url="https://reqres.in/api/users", data={'name': 'morpheus', 'job': 'leader'})
+    return response
+
+def test_update_user(user):
+    name = user.json()['name']
+    response = requests.put(url=f'{BASE_URL}/users/2', data={'name': name, 'job': 'zion resident'})
+    assert response.status_code == 200
+    data = response.json()
+    assert data['name'] == 'morpheus'
+    assert data['job'] == 'zion resident'
+
+def test_delete_user(user):
+    id = user.json()['id']
+    response = requests.delete(url=f'{BASE_URL}/users/{id}')
     assert response.status_code == 204
 
 # def test_get_user_negative():
@@ -33,19 +54,8 @@ def test_delete_user():
 def test_unsuccessful_login():
     response = requests.post(url=f"{BASE_URL}/login", data={'email': 'peter@klaven'})
     assert response.status_code == 400
-    assert json.loads(response.text) == {'error': 'Missing password'}
-    assert 'Missing password' in response.text
     assert response.json()['error'] == 'Missing password'
     assert response.headers['Content-Type'] == 'application/json; charset=utf-8'
-
-def test_create_user_schema1():
-    response = requests.post(url=f"{BASE_URL}/users", data={'name': 'morpheus', 'job': 'leader'})
-    body = response.json()
-
-    assert response.status_code == 201
-    with open('post_users.json') as file:
-        schema = json.load(file)
-        validate(instance=body, schema=schema)
 
 
 def test_create_user_schema2():
@@ -68,6 +78,7 @@ def test_get_user_business_logic():
         params={"page": "2"},
         verify=False
     )
+    assert response.status_code == 200
 
     assert response.json()['data'][0]['email'] == 'michael.lawson@reqres.in'
     assert response.json()['data'][1]['email'] == 'lindsay.ferguson@reqres.in'
@@ -78,6 +89,7 @@ def test_get_unique_users_business_logic2():
         params={"page": "2"},
         verify=False
     )
+    assert response.status_code == 200
 
     ids = [element['id'] for element in response.json()['data']]
 
