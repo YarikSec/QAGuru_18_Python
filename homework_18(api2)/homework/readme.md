@@ -41,3 +41,19 @@ logging.info(f'{json.dumps(json.loads(result.text), indent=4, ensure_ascii=False
 ```
 
 3) папки в питоне принято называть с маленькой буквы -> aqa_api_demowebshop
+
+1) Тут прям солянка получилась)
+@allure.parent_suite("demowebshop")
+@allure.suite("Корзина")
+@allure.epic("demowebshop")
+@allure.feature("Корзина")
+@allure.sub_suite("Добавление товаров в корзину")
+@allure.story("Добавление товаров в корзину")
+
+Обычно используются либо parent_suite +suite+sub_suite, либо эпик + фича + стори. Лучше оставить что-то одно
+
+2) почистить:
+В log_http_response_in_allure не используется строчка
+response_body = parse_response_body(response)
+
+В остальном очень хорошо)

@@ -22,7 +22,9 @@ from selene import have, browser
 
 @pytest.fixture(scope='function', autouse=True)
 
-
+@allure.epic("demowebshop")
+@allure.feature("Корзина")
+@allure.story("Добавление товаров в корзину")
 def test_add_to_cart():
     # Given
     """
