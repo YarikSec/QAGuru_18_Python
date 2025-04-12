@@ -55,5 +55,3 @@ logging.info(f'{json.dumps(json.loads(result.text), indent=4, ensure_ascii=False
 2) почистить:
 В log_http_response_in_allure не используется строчка
 response_body = parse_response_body(response)
-
-В остальном очень хорошо)
