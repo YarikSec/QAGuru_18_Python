@@ -21,6 +21,15 @@ from selene import have, browser
 """
 
 @pytest.fixture(scope='function', autouse=True)
+def browser_conf():
+    browser.config.base_url = 'https://demowebshop.tricentis.com/'
+    browser.config.type_by_js = True
+
+    yield
+
+    browser.quit()
+
+
 
 @allure.epic("demowebshop")
 @allure.feature("Корзина")
@@ -36,7 +45,7 @@ def test_add_to_cart():
 
     # When
     with allure.step('open browser'):
-        browser.open('https://demowebshop.tricentis.com/')
+        browser.open('')
 
     # Then
     """
