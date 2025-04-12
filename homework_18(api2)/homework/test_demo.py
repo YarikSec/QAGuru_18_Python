@@ -2,7 +2,6 @@ import requests
 import allure
 from allure_commons._allure import step
 import pytest
-import selene
 from selene import have, browser
 
 
@@ -19,17 +18,6 @@ from selene import have, browser
 на
 {json.dumps(json.loads(result.text), indent=4, ensure_ascii=False) if result.text else "None"}
 """
-
-@pytest.fixture(scope='function', autouse=True)
-def browser_conf():
-    browser.config.base_url = 'https://demowebshop.tricentis.com/'
-    browser.config.type_by_js = True
-
-    yield
-
-    browser.quit()
-
-
 
 @allure.epic("demowebshop")
 @allure.feature("Корзина")
