@@ -3,20 +3,17 @@ import allure
 from allure_commons._allure import step
 import pytest
 from selene import have, browser
+from utils import log_request, log_response
 
 
 """
-1. Написать несколько тестов на demoshop на добавление товаров в корзину через API с проверкой корзины через UI.
+1. Написать несколько тестов на demoshop на добавление 
+товаров в корзину через API с проверкой корзины через UI.
 
 2. Автоматизировать у себя в коде логирование в allure
 
-3. Задача со *: реализовать логирование реквеста в аллюр и в консоль https://demowebshop.tricentis.com/
-
-4) Если хочешь, чтобы в логах был красивый читаемый текст вместо абракадабры, то нужно заменить в методе log_to_console строчку
-в HTTP Response Body:
-{result.text}
-на
-{json.dumps(json.loads(result.text), indent=4, ensure_ascii=False) if result.text else "None"}
+3. Задача со *: реализовать логирование реквеста в аллюр 
+и в консоль https://demowebshop.tricentis.com/
 """
 
 @allure.epic("demowebshop")
@@ -28,8 +25,11 @@ def test_add_to_cart():
     Добавить товар в корзину через API
     """
     with allure.step('add to cart'):
-        result = requests.post('https://demowebshop.tricentis.com/addproducttocart/details/38/1')
-        print(result.status_code)
+        url = 'https://demowebshop.tricentis.com/addproducttocart/details/38/1'
+        log_request(url, 'POST')
+        result = requests.post(url)
+        log_response(result)
+
 
     # When
     with allure.step('open browser'):
@@ -42,3 +42,35 @@ def test_add_to_cart():
     """
     with allure.step('check cart'):
         browser.element('[class="cart-qty"]').should(have.text('1'))
+
+@allure.epic("demowebshop")
+@allure.feature("Корзина")
+@allure.story("Добавление нескольких товаров в корзину")
+def test_add_multiple_items_to_cart():
+    # Given
+    """
+    Добавить несколько товаров в корзину через API
+    """
+    with allure.step('add multiple items to cart'):
+        # Добавляем первый товар
+        url1 = 'https://demowebshop.tricentis.com/addproducttocart/details/38/1'
+        log_request(url1, 'POST')
+        result1 = requests.post(url1)
+        log_response(result1)
+        
+        # Добавляем второй товар
+        url2 = 'https://demowebshop.tricentis.com/addproducttocart/details/43/1'
+        log_request(url2, 'POST')
+        result2 = requests.post(url2)
+        log_response(result2)
+
+    # When
+    with allure.step('open browser'):
+        browser.open('')
+
+    # Then
+    """
+    Проверить что в корзине 2 товара
+    """
+    with allure.step('check cart'):
+        browser.element('[class="cart-qty"]').should(have.text('2'))
