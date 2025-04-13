@@ -199,3 +199,5 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+/homework_18(api2)/qa_guru_lesson_18-main/
+allure-results
